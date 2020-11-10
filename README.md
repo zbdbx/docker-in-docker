@@ -3,35 +3,39 @@
 #### 介绍
 docker-in-docker 扩展
 
-#### 软件架构
-软件架构说明
+#### 官方文档：
+https://hub.docker.com/_/docker
+https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
+https://about.gitlab.com/releases/2019/07/31/docker-in-docker-with-docker-19-dot-03/
 
 
-#### 安装教程
+#### 常规使用
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+##### 1、创建证书目录
+mkdir /docker
+mkdir /docker/certs
+mkdir /docker/certs/ca
+mkdir /docker/certs/client
 
-#### 使用说明
+##### 2、创建网络
+docker network create docker-dind-network
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+##### 3、创建docker-daemon
+docker run --privileged --name docker-dind -d \
+    --network docker-dind-network --network-alias docker \
+    -e DOCKER_TLS_CERTDIR=/certs \
+    -v /docker/certs/ca:/certs/ca \
+    -v /docker/certs/client:/certs/client \
+    docker:dind
+注意：如DOCKER_TLS_CERTDIR=空，使用的2376，否则使用的是2376
 
-#### 参与贡献
+##### 4、创建客户端，引用证书
+docker run -it --rm --network docker-dind-network \
+    -e DOCKER_TLS_CERTDIR=/certs \
+    -v /docker/certs/client:/certs/client:ro \
+    docker:latest
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
 
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+#### 单独使用 
+创建本地docker:dind容器
+docker run --privileged -e DOCKER_TLS_CERTDIR= --network-alias docker --name docker-dind --hostname docker-dind -p 2375:2375 -p 2376:2376 -v /etc/docker/daemon.json:/etc/docker/daemon.json  -d docker:stable-dind
