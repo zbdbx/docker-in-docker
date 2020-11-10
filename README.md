@@ -26,11 +26,11 @@ docker network create docker-dind-network
 
 ##### 3、创建docker-daemon
 ``` docker
-docker run --privileged --name docker-dind -d \
-    --network docker-dind-network --network-alias docker \
-    -e DOCKER_TLS_CERTDIR=/certs \
-    -v /docker/certs/ca:/certs/ca \
-    -v /docker/certs/client:/certs/client \
+docker run --privileged --name docker-dind -d
+    --network docker-dind-network --network-alias docker
+    -e DOCKER_TLS_CERTDIR=/certs
+    -v /docker/certs/ca:/certs/ca
+    -v /docker/certs/client:/certs/client
     docker:dind
 ```
 
@@ -38,9 +38,9 @@ docker run --privileged --name docker-dind -d \
 
 ##### 4、创建客户端，引用证书
 ``` docker
-docker run -it --rm --network docker-dind-network \
-    -e DOCKER_TLS_CERTDIR=/certs \
-    -v /docker/certs/client:/certs/client:ro \
+docker run -it --rm --network docker-dind-network
+    -e DOCKER_TLS_CERTDIR=/certs
+    -v /docker/certs/client:/certs/client:ro
     docker:latest
 ```
 
@@ -52,15 +52,14 @@ docker run --privileged -e DOCKER_TLS_CERTDIR= --network-alias docker --name doc
 
 #### 添加 git,docker-compose
 ``` docker
-FROM docker:stable \
-RUN apk add --no-cache git \
-RUN apk add --no-cache py3-pip python3-dev libffi-dev openssl-dev curl gcc libc-dev make && \
-    pip3 install docker-compose
+FROM docker:stable
+RUN apk add --no-cache git
+RUN apk add --no-cache py3-pip python3-dev libffi-dev openssl-dev curl gcc libc-dev make && pip3 install docker-compose
 ```
 
 或者
 ``` docker
-FROM docker:stable-git \
-RUN apk add --no-cache py3-pip python3-dev libffi-dev openssl-dev curl gcc libc-dev make && \
+FROM docker:stable-git
+RUN apk add --no-cache py3-pip python3-dev libffi-dev openssl-dev curl gcc libc-dev make &&
     pip3 install docker-compose
 ```
