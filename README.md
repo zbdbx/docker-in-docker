@@ -75,7 +75,7 @@ docker build -t zbdbx/docker:stable-git-compose .
 docker login -u zbdbx -p $Docker_Hub_PASSWORD https://registry-1.docker.io/v2/
 docker push zbdbx/docker:stable-git-compose
 ```
-使用
+使用  https://hub.docker.com/repository/docker/zbdbx/docker
 ``` shell
 docker pull zbdbx/docker:stable-git-compose
 ```
