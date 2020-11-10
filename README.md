@@ -61,7 +61,6 @@ FROM docker:stable
 RUN apk add --no-cache git
 RUN apk add --no-cache py3-pip python3-dev libffi-dev openssl-dev curl gcc libc-dev make && pip3 install docker-compose
 ```
-
 或者
 ``` docker
 FROM docker:stable-git
@@ -72,7 +71,11 @@ RUN apk add --no-cache py3-pip python3-dev libffi-dev openssl-dev curl gcc libc-
 ``` shell
 #!/usr/bin/env bash
 set -e
-docker build -t docker:stable-git-compose .
-echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-docker push docker:stable-git-compose
+docker build -t zbdbx/docker:stable-git-compose .
+docker login -u zbdbx -p $Docker_Hub_PASSWORD https://registry-1.docker.io/v2/
+docker push zbdbx/docker:stable-git-compose
+```
+使用
+``` shell
+docker pull zbdbx/docker:stable-git-compose
 ```
