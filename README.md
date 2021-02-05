@@ -79,3 +79,6 @@ docker push zbdbx/docker:stable-git-compose
 ``` shell
 docker pull zbdbx/docker:stable-git-compose
 ```
+
+#### 将本地docker port暴露出来 
+docker run --privileged --name docker -p 2375:2375 -p 2376:2376 -v /etc/docker/daemon.json:/etc/docker/daemon.json -v /var/lib/docker:/var/lib/docker zbdbx/docker:stable-git-compose
